@@ -54,7 +54,7 @@ const state = {
   showGuides: true,
 };
 
-// ---- Helpers ----
+
 function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
 
 function hcFromSlope(s){
@@ -171,7 +171,7 @@ function plotCurve(room, tmin, tmax, slope, style){
 }
 
 function drawGuides(tmin, tmax){
-  // 18/20/22 °C guide families (using hc at slope 1.0 just як довідник)
+  // 18/20/22 °C guide families
   const guideRoom = [18, 20, 22];
   for(const rt of guideRoom){
     plotCurve(rt, tmin, tmax, 1.0, { color: 'rgba(255,255,255,0.35)', width: 1, alpha: .35 });
@@ -212,7 +212,7 @@ function redraw(){
 
   // all curves faint
   if(state.showAll){
-    // залишаємо крок 0.2 тільки для «підписаних» орієнтирів; вибрана крива може бути будь-якою (із сотими)
+    
     for(let s = SLOPE_MIN; s <= SLOPE_MAX + 1e-6; s += 0.2){
       const rounded = Math.round(s*10)/10;
       plotCurve(room, tmin, tmax, rounded, { color:'rgba(255,255,255,0.35)', alpha:0.35,
@@ -227,7 +227,7 @@ function redraw(){
   const tf = tflow(room, tout, slope, tmin, tmax);
   drawPoint(tout, tf);
 
-  // UI text (показуємо slope з точністю до сотих)
+  // UI text
   inputs.resultPill.textContent = `Подача: ${fmt(tf,1)} °C`;
   inputs.metaText.textContent = `s=${fmt(slope,2)}, Tкімн=${fmt(room,1)} °C, Tзовн=${fmt(tout,0)} °C, Tmin=${fmt(tmin,0)} °C, Tmax=${fmt(tmax,0)} °C`;
 }
@@ -285,14 +285,14 @@ function readUrl(){
 }
 
 function init(){
-  // ✅ робимо slope кроком 0.01 (і для повзунка, і для числового поля), не змінюючи HTML
+
   inputs.slope.step = "0.01";
   inputs.slopeNum.step = "0.01";
 
   // couple inputs
   couple(inputs.room,  inputs.roomNum,  'room',  v=>Math.round(v*10)/10);
   couple(inputs.tout,  inputs.toutNum,  'tout',  v=>Math.round(v));
-  // ✅ slope тепер округляємо до СОТИХ:
+
   couple(inputs.slope, inputs.slopeNum, 'slope', v=>Math.round(v*100)/100);
   couple(inputs.tmin,  inputs.tminNum,  'tmin',  v=>Math.round(v));
   couple(inputs.tmax,  inputs.tmaxNum,  'tmax',  v=>Math.round(v));

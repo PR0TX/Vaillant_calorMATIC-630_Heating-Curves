@@ -5,11 +5,11 @@ import os
 
 PORT = 8000
 HERE = os.path.dirname(os.path.abspath(__file__))
-os.chdir(HERE)  # корінь — поточна папка
+os.chdir(HERE) 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, fmt, *args):
-        pass  # тихіший лог
+        pass 
 
 with socketserver.TCPServer(("", PORT), QuietHandler) as httpd:
     print(f"Serving on http://127.0.0.1:{PORT}/app/")

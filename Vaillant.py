@@ -1,24 +1,3 @@
-"""
-Heating curves visualizer for Vaillant calorMATIC 630 (Tkinter + Matplotlib)
-
-Model:
-  T_flow = clamp(Tmin, T_room + Hc(slope) * (T_room - T_out), Tmax)
-
-Where:
-  - slope in [0.2, 4.0] is the "опалювальна крива" number shown on the Vaillant chart
-  - Hc(slope) is an empirical gain calibrated to the official chart (visual interpolation)
-  - clamp applies user-configured Tmin / Tmax for the selected circuit (e.g. floor/rads)
-  - Parallel shift by room setpoint (18/20/22 °C lines on Fig. 3.4) is naturally captured.
-
-DISCLAIMER:
-  Vaillant does not publish an exact formula in the public user manual; this code uses a
-  carefully calibrated approximation. If you have a more precise digitization of the chart,
-  just update the ANCHORS list below — the rest will work automatically.
-
-Author: ChatGPT
-License: MIT
-"""
-
 import math
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
