@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>calorMATIC 630 • Heating Curves</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="theme-color" content="#0b1224" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>calorMATIC 630 • Heating Curves</h1>
+      <p class="subtitle">Погодні криві (0.2–4.0), паралельний зсув за кімнатною температурою</p>
+    </div>
+  </header>
+
+  <main class="container grid">
+    <!-- Controls -->
+    <section class="card controls">
+      <h2>Налаштування</h2>
+
+      <div class="field">
+        <label for="room">Кімнатна температура (°C)</label>
+        <div class="control">
+          <input id="room" type="range" min="15" max="24" step="0.1" value="20">
+          <input id="roomNum" class="num" type="number" min="15" max="24" step="0.1" value="20">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="tout">Зовнішня температура (°C)</label>
+        <div class="control">
+          <input id="tout" type="range" min="-20" max="20" step="1" value="0">
+          <input id="toutNum" class="num" type="number" min="-20" max="20" step="1" value="0">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="slope">Опалювальна крива (s)</label>
+        <div class="control">
+          <input id="slope" type="range" min="0.2" max="4.0" step="0.1" value="1.0">
+          <input id="slopeNum" class="num" type="number" min="0.2" max="4.0" step="0.1" value="1.0">
+        </div>
+        <p class="hint">0.2…4.0 як у Vaillant</p>
+      </div>
+
+      <div class="field">
+        <label for="tmin">Мін. подача, Tmin (°C)</label>
+        <div class="control">
+          <input id="tmin" type="range" min="15" max="40" step="1" value="25">
+          <input id="tminNum" class="num" type="number" min="15" max="40" step="1" value="25">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="tmax">Макс. подача, Tmax (°C)</label>
+        <div class="control">
+          <!-- ✅ як просили: мінімально допустиме значення для Tmax = 40 -->
+          <input id="tmax" type="range" min="40" max="90" step="1" value="75">
+          <input id="tmaxNum" class="num" type="number" min="40" max="90" step="1" value="75">
+        </div>
+      </div>
+
+      <div class="switches">
+        <label class="switch">
+          <input id="showAll" type="checkbox" checked>
+          <span>Показати всі криві</span>
+        </label>
+        <label class="switch">
+          <input id="showGrid" type="checkbox" checked>
+          <span>Сітка</span>
+        </label>
+        <label class="switch">
+          <input id="showGuides" type="checkbox" checked>
+          <span>Лінії 18/20/22 °C</span>
+        </label>
+      </div>
+
+      <div class="result">
+        <div class="pill" id="resultPill">Подача: — °C</div>
+        <div class="meta" id="metaText">s=1.0, Tкімн=20.0 °C, Tзовн=0 °C, Tmin=25 °C, Tmax=75 °C</div>
+      </div>
+
+      <div class="actions">
+        <button id="savePng" class="btn primary">Зберегти графік (PNG)</button>
+        <button id="reset" class="btn">Скинути</button>
+        <button id="share" class="btn ghost">Поділитися посиланням</button>
+      </div>
+
+      <p class="footnote">
+        Порада: для теплої підлоги частіше ставлять <strong>Tmin≈25–28 °C</strong> і <strong>Tmax≈40–45 °C</strong>.
+        Для радіаторів Tmax під систему, зазвичай ≤75–80 °C.
+      </p>
+    </section>
+
+    <!-- Chart -->
+    <section class="card chart">
+      <div class="chart-head">
+        <h2>Графік опалювальних кривих</h2>
+        <span class="legend">Вісь X: зовнішня температура (від +20 до −20 °C) • Вісь Y: подача (20…90 °C)</span>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="plot" aria-label="Heating curves chart"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>
+        Модель: <code>Tflow = clamp(Tmin, Troom + Hc(s)·(Troom − Tout), Tmax)</code>. <br />
+        <em>Hc(s)</em> інтерполюється з опорних точок, зчитаних із офіційного графіка Vaillant (похибка кілька °C).
+      </small>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
